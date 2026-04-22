@@ -1,8 +1,8 @@
 class RandomizedSet {
 public:
-    set<int> st;
+    set<int> st; 
     RandomizedSet() {
-        
+       
     }
     
     bool insert(int val) {
