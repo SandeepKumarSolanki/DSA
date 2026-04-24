@@ -6,7 +6,7 @@ public:
             return 0;
         if (t[n] != -1) 
             return t[n];
-        if (n == 1) 
+        if (n == 0) 
             return 1;
         int step_one = solve(n - 1);
         int step_two = solve(n - 2);
