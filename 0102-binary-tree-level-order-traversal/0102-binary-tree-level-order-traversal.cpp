@@ -11,22 +11,21 @@
  */
 class Solution {
 public:
-    void binaryLevelOrderTraversal(TreeNode* root, vector<vector<int>>& result) {
+    void levelOrderTraversal(TreeNode* root, vector<vector<int>> &result) {
         queue<TreeNode*> que;
         que.push(root);
+
         while(!que.empty()) {
-            int n = que.size();
+            int N = que.size();
             vector<int> temp;
-            for(int i = 0; i < n; i++) {
+            for(int i = 0; i < N; i++) {
                 TreeNode* node = que.front();
-                temp.push_back(node->val);
                 que.pop();
-                if(node->left != NULL) {
+                temp.push_back(node->val);
+                if(node->left != nullptr) 
                     que.push(node->left);
-                }
-                if(node->right != NULL) {
+                if(node->right != nullptr)
                     que.push(node->right);
-                }
             }
             result.push_back(temp);
         }
@@ -36,7 +35,7 @@ public:
             return {};
         }
         vector<vector<int>> result;
-        binaryLevelOrderTraversal(root, result);
+        levelOrderTraversal(root, result);
         return result;
     }
 };
