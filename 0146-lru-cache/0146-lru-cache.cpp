@@ -1,46 +1,45 @@
 class LRUCache {
 public:
-    vector<pair<int, int>> cache;
-    int n;
-    
+    list<int> dll;
+    unordered_map<int, pair<list<int>::iterator, int>> cache;
+    int capacity;
+
     LRUCache(int capacity) {
-        n = capacity;
+        this->capacity = capacity;
     }
-    
+
+    void recentlyUsed(int key) {
+        dll.erase(cache[key].first);
+        dll.push_front(key);
+        cache[key].first = dll.begin();
+    }
+
     int get(int key) {
-        for(int i = 0; i < cache.size(); i++) {
-            if(cache[i].first == key) {
-                int val = cache[i].second;
-                pair<int, int> temp = cache[i];
-                cache.erase(cache.begin()+i);
-                cache.push_back(temp);
-                return val;
-            }
+        if(cache.find(key) == cache.end()) {
+            return -1;
         }
-        return -1;
+        recentlyUsed(key);
+        return cache[key].second;
     }
-    
+
+    // Insert or update key-value
     void put(int key, int value) {
-        for(int i = 0; i < cache.size(); i++) {
-            if(cache[i].first == key) {
-                cache.erase(cache.begin()+i);
-                cache.push_back({key, value});
-                return;
-            }
+        // If key already exists
+        if(cache.find(key) != cache.end()) {
+            cache[key].second = value;
+            recentlyUsed(key);
         }
-        if (cache.size() == n) {
-            cache.erase(cache.begin());
-            cache.push_back({key, value});
-        } else {
-            cache.push_back({key, value});
+        else {
+            // Insert new key at front
+            dll.push_front(key);
+            cache[key] = {dll.begin(), value};
         }
 
+        // Remove least recently used key
+        if(cache.size() > capacity) {
+            int lru = dll.back();
+            dll.pop_back();
+            cache.erase(lru);
+        }
     }
 };
-
-/**
- * Your LRUCache object will be instantiated and called as such:
- * LRUCache* obj = new LRUCache(capacity);
- * int param_1 = obj->get(key);
- * obj->put(key,value);
- */
