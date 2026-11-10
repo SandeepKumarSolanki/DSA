@@ -1,16 +1,18 @@
 class LRUCache {
 public:
     list<int> dll;
-    map<int, pair<list<int>::iterator, int>> cache; //key->(list_node, value)
+    map<int, pair<list<int>::iterator, int>> cache;
     int capacity;
 
     LRUCache(int capacity) {
-        this->capacity = capacity;    
+        this->capacity = capacity;
     }
-    
-    void recentlyUsed(int key) {
+
+    void findElement(int key) {
         dll.erase(cache[key].first);
+
         dll.push_front(key);
+
         cache[key].first = dll.begin();
     }
 
@@ -18,31 +20,31 @@ public:
         if(cache.find(key) == cache.end()) {
             return -1;
         }
-        recentlyUsed(key);
+
+        findElement(key);
+
         return cache[key].second;
     }
-    
+
     void put(int key, int value) {
+
         if(cache.find(key) != cache.end()) {
             cache[key].second = value;
-            recentlyUsed(key);
-        } else {
+
+            findElement(key);
+        }
+        else {
             dll.push_front(key);
+
             cache[key] = {dll.begin(), value};
-            capacity--;
         }
 
-        if(capacity < 0) {
-            cache.erase(dll.back());
+        if(cache.size() > capacity) {
+            int lru = dll.back();
+
+            cache.erase(lru);
+
             dll.pop_back();
-            capacity++;
         }
     }
 };
-
-/**
- * Your LRUCache object will be instantiated and called as such:
- * LRUCache* obj = new LRUCache(capacity);
- * int param_1 = obj->get(key);
- * obj->put(key,value);
- */
