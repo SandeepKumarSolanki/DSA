@@ -5,46 +5,44 @@ public:
     int capacity;
 
     LRUCache(int capacity) {
-        this->capacity = capacity;
+        this->capacity = capacity;        
     }
 
-    void findElement(int key) {
+    void lru(int key) {
         dll.erase(cache[key].first);
-
         dll.push_front(key);
-
         cache[key].first = dll.begin();
     }
-
+    
     int get(int key) {
         if(cache.find(key) == cache.end()) {
             return -1;
         }
-
-        findElement(key);
-
+        lru(key);
         return cache[key].second;
     }
-
+    
     void put(int key, int value) {
-
         if(cache.find(key) != cache.end()) {
             cache[key].second = value;
-
-            findElement(key);
-        }
-        else {
+            lru(key);
+        } else {
             dll.push_front(key);
-
             cache[key] = {dll.begin(), value};
+            capacity--;
         }
-
-        if(cache.size() > capacity) {
-            int lru = dll.back();
-
-            cache.erase(lru);
-
+        
+        if(capacity < 0) {
+            cache.erase(dll.back());
             dll.pop_back();
+            capacity++;
         }
     }
 };
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
