@@ -4,14 +4,14 @@ public:
     map<int, pair<list<int>::iterator, int>> cache;
     int capacity;
 
-    LRUCache(int capacity) {
-        this->capacity = capacity;        
-    }
-
     void lru(int key) {
         dll.erase(cache[key].first);
         dll.push_front(key);
         cache[key].first = dll.begin();
+    }
+
+    LRUCache(int capacity) {
+        this->capacity = capacity;    
     }
     
     int get(int key) {
@@ -31,7 +31,7 @@ public:
             cache[key] = {dll.begin(), value};
             capacity--;
         }
-        
+
         if(capacity < 0) {
             cache.erase(dll.back());
             dll.pop_back();
