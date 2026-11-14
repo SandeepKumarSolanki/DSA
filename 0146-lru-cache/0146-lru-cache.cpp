@@ -9,7 +9,6 @@ public:
         dll.push_front(key);
         cache[key].first = dll.begin();
     }
-
     LRUCache(int capacity) {
         this->capacity = capacity;    
     }
@@ -31,7 +30,6 @@ public:
             cache[key] = {dll.begin(), value};
             capacity--;
         }
-
         if(capacity < 0) {
             cache.erase(dll.back());
             dll.pop_back();
