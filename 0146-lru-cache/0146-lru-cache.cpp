@@ -14,7 +14,7 @@ public:
     }
     
     int get(int key) {
-        if(cache.find(key) == cache.end()) {
+        if(!cache.count(key)) {
             return -1;
         }
         lru(key);
@@ -22,7 +22,7 @@ public:
     }
     
     void put(int key, int value) {
-        if(cache.find(key) != cache.end()) {
+        if(cache.count(key)) {
             cache[key].second = value;
             lru(key);
         } else {
